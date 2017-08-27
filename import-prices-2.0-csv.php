@@ -5,9 +5,11 @@ include "csv.php";
 // init db, get db name
 $db = JFactory::getDBO();
 $dbPrices = $db->quoteName("#__multifactories_prices_excel");
+$db->setquery( "TRUNCATE $dbPrices");
+$db->execute(); 
 
 // 1. parse csv file
-$importer = new CsvImporter("data/Capmex-import-price_13.08.17.csv", true); 
+$importer = new CsvImporter("data/Capmex-import-price_27.08.17.csv", true); 
 $rows = $importer->get();
 // var_dump($rows);
 
@@ -20,6 +22,6 @@ foreach ($rows as $product) {
   foreach ($product as $sub => $price ) {
     $query .= "($product_id, '$sub', $price),";
   }
-  $db->setQuery(substr($query, 0, -1) );
+  $db->setquery(substr($query, 0, -1) . " on duplicate key update price=values(price)");
   $db->execute(); 
 }
