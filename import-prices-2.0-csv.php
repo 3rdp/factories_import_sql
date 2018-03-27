@@ -13,7 +13,7 @@ $importer = new CsvImporter("data/Capmex-import-price_27.08.17.csv", true);
 $rows = $importer->get();
 // var_dump($rows);
 
-// 2. import this s**t
+// 2. import products
 foreach ($rows as $product) {
   $query = "INSERT INTO $dbPrices VALUES"; 
   $product_id = array_shift($product);
